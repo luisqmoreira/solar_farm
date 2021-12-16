@@ -9,6 +9,11 @@ from dash import dcc, html
 from dash import dash_table as dt
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
+# import dash_auth
+
+# ------------------------------------------------------------------------------
+
+# username_password = ['luis','12345']
 
 # ------------------------------------------------------------------------------
 # Importing files and formatting
@@ -117,6 +122,8 @@ def search_long(long):
 # App
 
 app = dash.Dash()
+
+# auth = dash_auth.BasicAuth(username_password, app)
 
 app.layout = dbc.Container(html.Div([
     html.H1(id='header',
