@@ -5,13 +5,19 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 import dash
-from dash import dcc, html, dash_table
+from dash import dcc, html
+from dash import dash_table as dt
+import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
 # ------------------------------------------------------------------------------
 # Importing files and formatting
 
 matrix = pd.read_csv("/Users/luismoreira/Desktop/Final_project/Databases/matrix.csv")
+
+features = pd.read_csv('/Users/luismoreira/Desktop/Final_project/Databases/additional_features.csv')
+
+features.drop(['Unnamed: 0'], axis=1, inplace=True)
 
 mb_token = 'pk.eyJ1IjoibHVpc3FtIiwiYSI6ImNreDgyYjR3cjJ2M2sycXB6amluaGVxdDcifQ.juWpwJjnuW99RKdeUW7dOg'
 
@@ -112,12 +118,16 @@ def search_long(long):
 
 app = dash.Dash()
 
-app.layout = html.Div([
+app.layout = dbc.Container(html.Div([
     html.H1(id='header',
             children='Solar Farming in Portugal',
             style={'color': 'white', 'fontSize': 40, 'font': 'sans-serif', 'textAlign': 'center'}),
     dcc.Graph(id='graph',
               figure='surface'),
+    html.Div(
+        id='table-container',
+        className='tableDiv'
+    ),
     html.Div([
         dcc.Slider(id='select_lat',
                    min=36.18,
@@ -144,12 +154,15 @@ app.layout = html.Div([
                   figure=specFig_elevation),
         dcc.Graph(id='Phov',
                   figure=specFig_phov)
-    ], style={'background-color': '#0E1012'})
+    ], style={'background-color': '#0E1012'}),
+
 ], style={'background-color': '#0E1012'})
+)
 
 
 # ------------------------------------------------------------------------------
 
+# Callbacks - Creating Interaction between inputs and graphs/tables
 @app.callback(
     Output('graph', 'figure'),
     [Input('select_lat', 'value'),
@@ -174,6 +187,33 @@ def search(lat, long):
                       paper_bgcolor='#0E1012')
 
     return fig
+
+
+@app.callback(
+    Output('table-container','children'),
+    [Input('select_lat', 'value'),
+     Input('select_long', 'value')])
+def filter_table(lat, long):
+    df = features[(features['lat'] == lat) & (features['long'] == long)]
+    return html.Div([
+        dt.DataTable(
+            id='main-table',
+            columns=[{'name': i, 'id': i} for i in df.columns],
+            data=df.to_dict('rows'),
+            style_cell={'font': 'sans-serif',
+                        'font_color': 'white',
+                        'textAlign': 'centre',
+                        'background-color': '#0E1012'},
+            style_data={'color': 'white',
+                        'backgroundColor': '#0E1012'},
+            style_header={
+                'backgroundColor': '#0E1012',
+                'color': 'white',
+                'fontWeight': 'bold'}
+        )
+    ])
+
+
 
 
 if __name__ == '__main__':
