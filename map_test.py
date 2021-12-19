@@ -9,6 +9,7 @@ from dash import dcc, html
 from dash import dash_table as dt
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
+
 # import dash_auth
 
 # ------------------------------------------------------------------------------
@@ -197,7 +198,7 @@ def search(lat, long):
 
 
 @app.callback(
-    Output('table-container','children'),
+    Output('table-container', 'children'),
     [Input('select_lat', 'value'),
      Input('select_long', 'value')])
 def filter_table(lat, long):
@@ -219,8 +220,6 @@ def filter_table(lat, long):
                 'fontWeight': 'bold'}
         )
     ])
-
-
 
 
 if __name__ == '__main__':
