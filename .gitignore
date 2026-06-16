@@ -6,6 +6,9 @@ __pycache__/
 .ruff_cache/
 .venv/
 venv/
+.streamlit/
+*.egg-info/
+.streamlit/credentials.toml
 
 # Raw/intermediate geospatial data can be very large. Keep reproducible metadata
 # and configs in git; keep generated/downloaded data local.

@@ -11,6 +11,10 @@ from solar_suitability.geo import missing_real_datasets
 from solar_suitability.pipeline import prepare_scored_cells
 
 
+class RealPipelineNotImplemented(RuntimeError):
+    """Raised when the requested full GIS model is outside the MVP scope."""
+
+
 SAMPLE_RECORDS: list[dict[str, Any]] = [
     {
         "cell_id": "sample_beja_001",
@@ -118,10 +122,11 @@ def build_real_outputs(
             f"{details}"
         )
 
-    # Once the source files are present, this hook can be expanded into the
-    # full raster/vector overlay. Until then, it returns deterministic outputs
-    # so the app and tests remain usable in a clean clone.
-    return build_sample_outputs(model_config, output_dir=output_dir)
+    raise RealPipelineNotImplemented(
+        "The full GIS overlay is not implemented in this runnable MVP yet. "
+        "Use `solar-suitability build --sample` for app-ready demo outputs. "
+        "The next phase should implement OSM/CORINE/DEM/protected-area overlays behind this interface."
+    )
 
 
 def _write_candidates_geojson(records: list[dict[str, Any]], path: Path) -> None:

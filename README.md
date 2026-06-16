@@ -40,16 +40,23 @@ tests/            # unit and smoke tests
 
 ## Setup
 
+For the runnable MVP:
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e ".[dev]"
+python -m pip install -r requirements.txt
 ```
 
-The geospatial dependencies are intentionally explicit in `pyproject.toml`
-because the full model needs raster/vector processing. If local GDAL wheels are
-not available on your platform, install GDAL/GEOS/PROJ through your package
-manager or Conda before installing the project.
+The full real-GIS model will need heavier geospatial packages. Install them only
+when working on that next phase:
+
+```bash
+python -m pip install -e ".[geo]"
+```
+
+If local GDAL wheels are not available on your platform, install GDAL/GEOS/PROJ
+through your package manager or Conda before installing `.[geo]`.
 
 ## Commands
 
@@ -71,11 +78,23 @@ Some sources are API-gated or portal-based:
 - CORINE Land Cover and DEM inputs may need manual download into the paths
   documented in `config/sources.yml`.
 
-Build sample outputs, useful for testing the app without downloading large data:
+Check local readiness:
 
 ```bash
+solar-suitability doctor
+```
+
+Build app-ready sample outputs. `build` defaults to the sample dataset, so both
+commands below are equivalent:
+
+```bash
+solar-suitability build
 solar-suitability build --sample
 ```
+
+The full real-data build is intentionally deferred in this MVP. `--real` checks
+for configured source files and then reports that the OSM/CORINE/DEM/protected
+area overlay is the next implementation phase.
 
 Run the app:
 
