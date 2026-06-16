@@ -1,0 +1,21 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Raw/intermediate geospatial data can be very large. Keep reproducible metadata
+# and configs in git; keep generated/downloaded data local.
+data/raw/*
+data/interim/*
+data/processed/*
+outputs/*
+
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!outputs/.gitkeep
+!outputs/sample/
