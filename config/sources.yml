@@ -1,0 +1,50 @@
+version: 1
+region: mainland_portugal
+notes:
+  - Large downloads require passing --allow-large to the downloader.
+  - API-gated sources require the documented environment variable.
+
+sources:
+  pvgis:
+    kind: api_template
+    description: PVGIS grid-connected PV estimate for 1 kWp crystalline silicon systems.
+    template: "https://re.jrc.ec.europa.eu/api/v5_3/PVcalc?lat={lat}&lon={lon}&peakpower=1&loss=14&angle={tilt}&aspect=0&outputformat=json"
+    output: data/raw/pvgis
+    required: true
+
+  geofabrik_osm:
+    kind: url
+    description: OpenStreetMap Portugal extract used for roads, power infrastructure, water, and built features.
+    url: "https://download.geofabrik.de/europe/portugal-latest.osm.pbf"
+    output: data/raw/osm/portugal-latest.osm.pbf
+    large: true
+    required: true
+
+  geofabrik_poly:
+    kind: url
+    description: Portugal polygon boundary from Geofabrik, useful for clipping the OSM extract.
+    url: "https://download.geofabrik.de/europe/portugal.poly"
+    output: data/raw/osm/portugal.poly
+    required: true
+
+  corine_land_cover:
+    kind: manual
+    description: Copernicus CORINE Land Cover vector/raster dataset, used for land-use exclusions and suitability.
+    landing_page: "https://land.copernicus.eu/en/products/corine-land-cover"
+    output: data/raw/copernicus/corine_land_cover.gpkg
+    required: true
+
+  protected_planet:
+    kind: protected_planet_api
+    description: WDPA/OECM protected areas for Portugal.
+    endpoint: "https://api.protectedplanet.net/v3/countries/PRT"
+    token_env: PROTECTED_PLANET_TOKEN
+    output: data/raw/protected_areas/protected_planet_prt.json
+    required: true
+
+  dem:
+    kind: manual
+    description: EU/Open DEM covering mainland Portugal; used to derive slope and aspect.
+    landing_page: "https://portal.opentopography.org/raster?opentopoID=OTSDEM.032021.4326.1"
+    output: data/raw/dem/mainland_portugal_dem.tif
+    required: true

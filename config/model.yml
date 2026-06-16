@@ -1,0 +1,83 @@
+version: 1
+region:
+  name: mainland_portugal
+  analysis_crs: "EPSG:3763"
+  source_crs: "EPSG:4326"
+  mainland_bbox_lonlat:
+    west: -9.56
+    south: 36.95
+    east: -6.18
+    north: 42.16
+
+grid:
+  cell_size_m: 1000
+  min_candidate_area_ha: 20
+
+thresholds:
+  max_slope_degrees: 10
+  road_buffer_m: 50
+  building_buffer_m: 100
+  water_buffer_m: 100
+  protected_area_buffer_m: 0
+  max_grid_distance_m: 15000
+  max_road_distance_m: 5000
+
+weights:
+  pv_resource: 0.35
+  slope: 0.15
+  aspect: 0.10
+  grid_distance: 0.20
+  road_distance: 0.10
+  landcover: 0.10
+
+landcover:
+  excluded_corine_classes:
+    - 111
+    - 112
+    - 121
+    - 122
+    - 123
+    - 124
+    - 131
+    - 132
+    - 133
+    - 141
+    - 142
+    - 311
+    - 312
+    - 313
+    - 411
+    - 412
+    - 421
+    - 422
+    - 423
+    - 511
+    - 512
+    - 521
+    - 522
+    - 523
+  preferred_corine_classes:
+    - 211
+    - 212
+    - 213
+    - 221
+    - 222
+    - 223
+    - 231
+    - 241
+    - 242
+    - 243
+    - 244
+    - 321
+    - 322
+    - 323
+    - 324
+
+exclusion_flags:
+  - outside_mainland
+  - protected_area
+  - water_or_wetland
+  - built_or_urban
+  - slope_too_steep
+  - unsuitable_landcover
+  - buffered_road_or_building
